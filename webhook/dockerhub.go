@@ -5,8 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"time"
 
 	"gopkg.in/birkirb/loggers.v1/log"
+
+	"github.com/WuHan0608/webhook-listener/utils"
 )
 
 type pushData struct {
@@ -54,16 +58,29 @@ func DockerHubHandler() http.Handler {
 				return
 			}
 			defer r.Body.Close()
+
 			data := payload{}
 			if err := json.Unmarshal(body, &data); err != nil {
 				log.Errorf("decode payload error: %v", err)
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			log.Printf("%#v\n", data)
+			var (
+				userKeys = os.Getenv("PUSHOVER_USER_KEYS")
+				apiToken = os.Getenv("PUSHOVER_API_TOKEN")
+			)
+			if len(userKeys) == 0 || len(apiToken) == 0 {
+				log.Error("pushover request error: no user keys or api token is set")
+				http.Error(w, "pushover request error", http.StatusInternalServerError)
+				return
+			}
+			pushedAtTime := time.Unix(data.PushData.PushedAt, 0)
+			message := fmt.Sprintf("%s:%s is pushed by %s at %s", data.Repository.RepoName, data.PushData.Tag, data.PushData.Pusher, pushedAtTime.String())
+			if err := utils.Pushover(userKeys, apiToken, message); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
 		} else {
 			http.Error(w, "Allowed methods: GET, POST", http.StatusMethodNotAllowed)
-			return
 		}
 	})
 	return dockerHubMux
