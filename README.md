@@ -16,21 +16,21 @@ Webhook HTTP Listener
   - PUSHOVER_USER_KEYS: pushover user keys seperated by comma or semicolon
   - PUSHOVER_API_TOKEN: pushover api token
 
-    ```
-    [Unit]
-    Description=Webhook HTTP Server
-    After=network.target
+```
+[Unit]
+Description=Webhook HTTP Server
+After=network.target
 
-    [Service]
-    User=centos
-    Environment=LISTEN_ADDRESS=:8001
-    Environment=PUSHOVER_USER_KEYS=userKey1,userKey2,groupKey3,groupKey4
-    Environment=PUSHOVER_API_TOKEN=apiToken
-    ExecStart=/home/centos/gocode/bin/webhook-listener
+[Service]
+User=centos
+Environment=LISTEN_ADDRESS=:8001
+Environment=PUSHOVER_USER_KEYS=userKey1,userKey2,groupKey3,groupKey4
+Environment=PUSHOVER_API_TOKEN=apiToken
+ExecStart=/home/centos/gocode/bin/webhook-listener
 
-    [Install]
-    WantedBy=multi-user.target
-    ```
+[Install]
+WantedBy=multi-user.target
+```
 
 - start systemd service
 ```
