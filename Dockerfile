@@ -12,7 +12,7 @@ COPY . "$GOPATH/src/github.com/WuHan0608/webhook-listener/"
 
 RUN apk add -U musl-dev go && \
     cd "$GOPATH/src/github.com/WuHan0608/webhook-listener/" && \
-    go install -ldflags="-s -w" && \
+    CGO_ENABLED=0 go install -ldflags="-s -w" && \
     apk del -r go && \
     rm -rf /var/cache/apk/*
 
