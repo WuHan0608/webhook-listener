@@ -10,11 +10,10 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chown 777 "$GOPATH"
 
 COPY . "$GOPATH/src/github.com/WuHan0608/webhook-listener/"
 
-RUN apk add -U musl-dev go && \
+RUN apk add -U musl-dev go ca-certificates && \
     cd "$GOPATH/src/github.com/WuHan0608/webhook-listener/" && \
-    CGO_ENABLED=0 go install -ldflags="-s -w" && \
+    go install -ldflags="-s -w" && \
     apk del -r go && \
-    apk add ca-certificates && \
     rm -rf /var/cache/apk/*
 
 WORKDIR $GOPATH
