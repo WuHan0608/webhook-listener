@@ -3,9 +3,9 @@ Webhook HTTP Listener
 
 ### Installation
 ```
-# mkdir -p $GOPATH/src/hub000.xindong.com/devops
-# cd $GOPATH/src/hub000.xindong.com/devops
-# git clone https://hub000.xindong.com/devops/webhook-listener.git
+# mkdir -p $GOPATH/src/github.com/WuHan0608/
+# cd $GOPATH/src/github.com/WuHan0608/
+# git clone https://github.com/WuHan0608/webhook-listener.git
 # cd webhook-listener
 # CGO_ENABLED=0 GOOS=linux go install -ldflags="-s -w"
 ```
@@ -13,6 +13,7 @@ Webhook HTTP Listener
 ### Systemd Service
 - create systemd unit file: /etc/systemd/system/webhook-listener.service
   - LISTEN_ADDRESS: http server listen address, defaults to :80
+  - TRACK_REPO_TAG: track the specified repository tag only, defaults to all tags
   - PUSHOVER_USER_KEYS: pushover user keys seperated by comma or semicolon
   - PUSHOVER_API_TOKEN: pushover api token
 
@@ -24,6 +25,7 @@ After=network.target
 [Service]
 User=centos
 Environment=LISTEN_ADDRESS=:8001
+Environment=TRACK_REPO_TAG="latest"
 Environment=PUSHOVER_USER_KEYS=userKey1,userKey2,groupKey3,groupKey4
 Environment=PUSHOVER_API_TOKEN=apiToken
 ExecStart=/home/centos/gocode/bin/webhook-listener
@@ -46,7 +48,7 @@ WantedBy=multi-user.target
 
 - start container
 ```
-# docker run -d --restart=always --name=webhook-listener -p 8000:8000 -e LISTEN_ADDRESS=":8000" -e PUSHOVER_USER_KEYS="userKey1,userKey2,groupKey3,groupKey4" -e PUSHOVER_API_TOKEN="apiToken" wuhan/webhook-listener:latest
+# docker run -d --restart=always --name=webhook-listener -p 8000:8000 -e LISTEN_ADDRESS=":8000" -e TRACK_REPO_TAG="latest" -e PUSHOVER_USER_KEYS="userKey1,userKey2,groupKey3,groupKey4" -e PUSHOVER_API_TOKEN="apiToken" wuhan/webhook-listener:latest
 ```
 
 ### Integrated Webhook Services
@@ -54,5 +56,3 @@ WantedBy=multi-user.target
   - webhook url: `http://<public_ip>:<published_port>/webhook/dockerhub`
   - health status: `curl -s http://<public_ip>:<published_port>/webhook/dockerhub`
 
-### TODO
-- Track the specified repository tag
