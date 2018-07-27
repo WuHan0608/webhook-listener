@@ -53,3 +53,6 @@ WantedBy=multi-user.target
 - DockerHub Automated Build Webhook
   - webhook url: `http://<public_ip>:<published_port>/webhook/dockerhub`
   - health status: `curl -s http://<public_ip>:<published_port>/webhook/dockerhub`
+
+### TODO
+- Track the specified repository tag
