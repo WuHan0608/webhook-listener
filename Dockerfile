@@ -10,7 +10,8 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chown 777 "$GOPATH"
 
 COPY . "$GOPATH/src/github.com/WuHan0608/webhook-listener/"
 
-RUN apk add -U musl-dev go ca-certificates && \
+RUN apk add -U musl-dev go ca-certificates tzdata && \
+    ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     cd "$GOPATH/src/github.com/WuHan0608/webhook-listener/" && \
     go install -ldflags="-s -w" && \
     apk del -r go && \
