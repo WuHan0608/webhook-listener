@@ -66,9 +66,16 @@ func DockerHubHandler() http.Handler {
 				return
 			}
 			var (
+				trackTag = os.Getenv("TRACK_REPO_TAG")
 				userKeys = os.Getenv("PUSHOVER_USER_KEYS")
 				apiToken = os.Getenv("PUSHOVER_API_TOKEN")
 			)
+			if len(trackTag) > 0 {
+				if data.PushData.Tag != trackTag {
+					log.Infof("track repo tag \"%s\" only, ignore tag \"%s\"", trackTag, data.PushData.Tag)
+					return
+				}
+			}
 			if len(userKeys) == 0 || len(apiToken) == 0 {
 				log.Error("pushover request error: no user keys or api token is set")
 				http.Error(w, "pushover request error", http.StatusInternalServerError)
