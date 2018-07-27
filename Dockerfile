@@ -2,6 +2,8 @@ FROM alpine:latest
 
 ENV LISTEN_ADDRESS ":8080"
 
+ENV TRACK_REPO_TAG ""
+
 ENV GOPATH /go
 
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
