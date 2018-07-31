@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/WuHan0608/webhook-listener/webhook"
+	"github.com/WuHan0608/webhook-pushover/webhook"
 )
 
 var (

@@ -10,7 +10,7 @@ import (
 
 	"gopkg.in/birkirb/loggers.v1/log"
 
-	"github.com/WuHan0608/webhook-listener/utils"
+	"github.com/WuHan0608/webhook-pushover/utils"
 )
 
 type pushData struct {
